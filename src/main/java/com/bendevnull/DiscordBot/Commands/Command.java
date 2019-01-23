@@ -1,7 +1,5 @@
 package com.bendevnull.DiscordBot.Commands;
 
-import com.bendevnull.DiscordBot.Commands.Categories.Category;
-
 import net.dv8tion.jda.core.entities.Message;
 
 public abstract class Command {
@@ -9,7 +7,7 @@ public abstract class Command {
 	private String name;
 	private String description;
 	private String usage;
-	private Category category;
+	private String category;
 	private boolean enabled;
 	
 	public Command(String name, String description, String usage) {
@@ -30,11 +28,11 @@ public abstract class Command {
 		return this.usage;
 	}
 
-	public Category getCategory() {
+	public String getCategory() {
 		return this.category;
 	}
 	
-	public void setCategory(Category c) {
+	public void setCategory(String c) {
 		this.category = c;
 	}
 	
