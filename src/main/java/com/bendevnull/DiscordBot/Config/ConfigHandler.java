@@ -60,4 +60,8 @@ public class ConfigHandler {
 		return this.client;
 	}
 
+	public void saveConfig() {
+		
+	}
+
 }

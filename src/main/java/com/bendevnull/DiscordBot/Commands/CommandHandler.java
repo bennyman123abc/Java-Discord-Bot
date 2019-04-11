@@ -5,14 +5,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bendevnull.DiscordBot.Logging.BotLoggerFactory;
+
+import org.slf4j.Logger;
+
+import net.dv8tion.jda.core.Permission;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 
 public class CommandHandler {
 
     private Map<String, Command> commands;
+    private Map<String, Category> categories;
+    private Logger logger;
     
     public CommandHandler() {
-        this.commands = new HashMap<String, Command>();
+        this.commands = new HashMap<>();
+        this.categories = new HashMap<>();
+        this.logger = BotLoggerFactory.createLogger(this);
     }
 
     public CommandHandler addCommand(Command c) {
@@ -22,8 +32,33 @@ public class CommandHandler {
         return this;
     }
 
+    public CommandHandler addCategory(String c, String d) {
+        if (!this.categories.containsKey(c)) {
+            this.categories.put(c, new Category(c, d));
+        }
+        return this;
+    }
+
+    public CommandHandler runInit() {
+        for (Map.Entry<String, Command> entry : this.commands.entrySet()) {
+            entry.getValue().init();
+        }
+        return this;
+    }
+
+    public CommandHandler runPostInit() {
+        for (Map.Entry<String, Command> entry : this.commands.entrySet()) {
+            entry.getValue().postInit();
+        }
+        return this;
+    }
+
     public Command getCommand(String s) {
         return this.commands.get(s);
+    }
+
+    public Category getCategory(String s) {
+        return this.categories.get(s);
     }
 
     public boolean hasCommand(String s) {
@@ -35,8 +70,16 @@ public class CommandHandler {
     }
 
     public List<Command> getCommandList() {
-        List<Command> c = new ArrayList<Command>();
+        List<Command> c = new ArrayList<>();
         for (Map.Entry<String, Command> entry : this.commands.entrySet()) {
+            c.add(entry.getValue());
+        }
+        return c;
+    }
+
+    public List<Category> getCategoryList() {
+        List<Category> c = new ArrayList<>();
+        for (Map.Entry<String, Category> entry : this.categories.entrySet()) {
             c.add(entry.getValue());
         }
         return c;
@@ -44,6 +87,10 @@ public class CommandHandler {
 
     public Map<String, Command> getCommandMap() {
         return this.commands;
+    }
+
+    public Map<String, Category> getCategoryMap() {
+        return this.categories;
     }
 
     public void runCommand(final Command c, final Message m, final String[] args) {
@@ -58,6 +105,7 @@ public class CommandHandler {
     public void runCommand(String s, final Message m, final String[] args) {
         final Command c = this.getCommand(s);
         if (c == null) {
+            this.logger.error(String.format("Command %s not found.", s));
             return;
         } else {
             Thread t = new Thread(new Runnable() {
@@ -67,6 +115,15 @@ public class CommandHandler {
             });
             t.start();
         }
+    }
+
+    public static boolean hasPermissions(Member member, Permission[] permissions) {
+        for (Permission p : permissions) {
+            if (!member.hasPermission(p)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

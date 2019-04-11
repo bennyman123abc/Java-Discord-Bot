@@ -4,15 +4,17 @@ import org.json.simple.JSONObject;
 
 public class Config extends Object {
 	
-	public String token;
-	public String prefix;
+	public String token = "";
+	public String prefix = "*";
+	public String owner = "";
 
 	private JSONObject json;
 	
 	public Config(JSONObject json) {
 		this.token = (String) json.get("token");
 		this.prefix = (String) json.get("prefix");
-		// TODO finish filling in config fields as development continues
+		this.owner = (String) json.get("owner");
+		// finish filling in config fields as development continues
 
 		this.json = json;
 	}
