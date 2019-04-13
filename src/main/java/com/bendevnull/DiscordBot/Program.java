@@ -54,7 +54,8 @@ public class Program {
 			.addCategory("General", "The general purpose commands mostly available to everyone.")
 			.addCategory("Admin", "Commands used to change bot settings for guilds or for other purposes.")
 			.addCategory("Fun", "Commands available for entertainment purposes.")
-			.addCategory("Debug", "Commands used for debugging purposes. There is no guarantee these will remain in the bot.");
+			.addCategory("Debug", "Commands used for debugging purposes. There is no guarantee these will remain in the bot.")
+			.addCategory("Music", "Commands that deal with music, or the manipulation of sound.");
 
 		commandHandler.runInit()
 			.runPostInit();
