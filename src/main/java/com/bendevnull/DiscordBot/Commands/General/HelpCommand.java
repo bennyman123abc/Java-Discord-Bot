@@ -2,10 +2,8 @@ package com.bendevnull.DiscordBot.Commands.General;
 
 import java.util.List;
 
-import com.bendevnull.DiscordBot.Program;
 import com.bendevnull.DiscordBot.Commands.Command;
 
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 
 public class HelpCommand extends Command {
@@ -25,14 +23,4 @@ public class HelpCommand extends Command {
         
     }
 
-    // TODO Move this to a util file
-    public static String renderUsage(Command cmd, Guild guild) {
-        String prefix = Program.getGuildDAO().getPrefix(guild);
-        String name = cmd.getName();
-        return cmd.getUsage()
-            .replace("$cmd", String.format("%s%s",
-                prefix,
-                name))
-            .replace(" | ", "\n");
-    }
 } 

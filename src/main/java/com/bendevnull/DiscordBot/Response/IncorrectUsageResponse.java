@@ -1,8 +1,8 @@
 package com.bendevnull.DiscordBot.Response;
 
 import com.bendevnull.DiscordBot.Program;
+import com.bendevnull.DiscordBot.Util;
 import com.bendevnull.DiscordBot.Commands.Command;
-import com.bendevnull.DiscordBot.Commands.General.HelpCommand;
 import com.bendevnull.DiscordBot.Embed.ErrorEmbed;
 
 import net.dv8tion.jda.core.entities.Guild;
@@ -22,7 +22,7 @@ public class IncorrectUsageResponse extends Command {
 
     public void run(Message m, String[] args) {
         m.getChannel().sendMessage(new ErrorEmbed(String.format("Incorrect command usage!\n\nUsage:\n%s",
-            HelpCommand.renderUsage(cmd, guild))).build()).queue();
+            Util.renderUsage(cmd, guild))).build()).queue();
     }
 
     public static void fire(Message m, Command c) {
