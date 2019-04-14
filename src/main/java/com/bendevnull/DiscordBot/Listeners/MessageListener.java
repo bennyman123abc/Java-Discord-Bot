@@ -9,6 +9,7 @@ import com.bendevnull.DiscordBot.Commands.Command;
 import com.bendevnull.DiscordBot.Commands.CommandHandler;
 import com.bendevnull.DiscordBot.Database.GuildDAO;
 import com.bendevnull.DiscordBot.Database.LoggerDAO;
+import com.bendevnull.DiscordBot.Response.CommandDisabledResponse;
 import com.bendevnull.DiscordBot.Response.NoPermissionResponse;
 
 // import org.slf4j.Logger;
@@ -92,7 +93,10 @@ public class MessageListener extends ListenerAdapter {
 
 		if (handler.hasCommand(cmd)) {
 			Command c = handler.getCommand(cmd);
-			if (message.getMember().hasPermission(c.getPermissions()) || message.getAuthor().getId().equalsIgnoreCase(Program.getConfig().owner)) {
+			if (c.isEnabled() == false) {
+				CommandDisabledResponse.fire(message);
+			}
+			else if (message.getMember().hasPermission(c.getPermissions()) || message.getAuthor().getId().equalsIgnoreCase(Program.getConfig().owner)) {
 				handler.runCommand(c, message, args);
 			} else {
 				NoPermissionResponse.fire(message);

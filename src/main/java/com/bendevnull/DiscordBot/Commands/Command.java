@@ -29,10 +29,7 @@ public abstract class Command {
 	}
 
 	public Command(String name, String description, String usage, Permission perms, String cat) {
-		this.name = name;
-		this.description = description;
-		this.usage = usage;
-		this.perms = perms;
+		this(name, description, usage, perms);
 		this.categoryString = cat;
 	}
 	
