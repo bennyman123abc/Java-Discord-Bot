@@ -10,11 +10,11 @@ import net.dv8tion.jda.core.entities.Message;
 
 public class NoPermissionResponse extends Command {
 
-    private static String cmdName;
+    private static Command cmd;
 
     public NoPermissionResponse() {
         super("resp-npr", "", "", null);
-        cmdName = this.getName();
+        cmd = this;
     }
 
     public void run(Message m, String[] args) {
@@ -37,6 +37,6 @@ public class NoPermissionResponse extends Command {
     }
 
     public static void fire(Message m) {
-        Program.getCommandHandler().runCommand(cmdName, m, null);
+        Program.getCommandHandler().runCommand(cmd, m, null);
     }
 }

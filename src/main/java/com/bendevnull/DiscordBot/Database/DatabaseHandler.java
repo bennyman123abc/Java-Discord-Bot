@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import com.bendevnull.DiscordBot.Logging.BotLoggerFactory;
@@ -56,19 +58,58 @@ public class DatabaseHandler {
 
 	public void verifyTable(String name, String[] keys) {
 		List<String> keyList = Arrays.asList(keys);
-		String base = "ALTER TABLE %s ADD %s";
+		String baseAlter = "ALTER TABLE %s ADD %s";
+		String baseAlterDrop = "ALTER TABLE %s RENAME COLUMN %s TO %s_old_%d";
+		String basePragma = "PRAGMA table_info(%s)";
+		String baseSchema = "SELECT sql FROM sqlite_master WHERE tbl_name = '%s' AND type = 'table'";
 
-		for (String s : keyList) {
-			// String column = s.split(" ")[0];
-			String sql = String.format(base, name, s);
+		String schema = "";
 
-			try {
-				Statement stmt = this.conn.createStatement();
-				stmt.execute(sql);
-			} catch(SQLException e) {
-				this.logger.error(e.toString());
+		try {
+			Statement stmt = this.conn.createStatement();
+			String filledSchema = String.format(baseSchema, name);
+			ResultSet rs = stmt.executeQuery(filledSchema);
+			schema = rs.getString("sql");
+		} catch(SQLException e) {
+			this.logger.error(e.toString());
+			return;
+		}
+
+		List<String> schemaKeys = new ArrayList<>(Arrays.asList(schema.split("\n")));
+		schemaKeys.remove(0);
+		schemaKeys.remove(schemaKeys.size() - 1);
+		
+		for (String schemaKey : schemaKeys) {
+			schemaKey = schemaKey.replace(",", "");
+			String schemaName = schemaKey.split(" ")[0];
+			for (String key : keys) {
+				String keyName = key.split(" ")[0];
+				if (keyName.equalsIgnoreCase(schemaName)) {
+					if (!key.equalsIgnoreCase(schemaKey)) {
+						try {
+							Statement stmt = this.conn.createStatement();
+							stmt.execute(String.format(baseAlterDrop, name, schemaName, schemaName, new Date().getTime()));
+							stmt.execute(String.format(baseAlter, name, schemaKey));
+						} catch(SQLException e) {
+							this.logger.error(e.toString());
+							return;
+						}
+					}
+				}
 			}
 		}
+
+		// for (String s : keyList) {
+		// 	// String column = s.split(" ")[0];
+		// 	String sql = String.format(baseAlter, name, s);
+
+		// 	try {
+		// 		Statement stmt = this.conn.createStatement();
+		// 		stmt.execute(sql);
+		// 	} catch(SQLException e) {
+		// 		this.logger.error(e.toString());
+		// 	}
+		// }
 	}
 
 	public ResultSet get(String table, String key) {
@@ -88,7 +129,7 @@ public class DatabaseHandler {
 			Statement stmt = this.conn.createStatement();
 			return stmt.executeQuery(sql);
 		} catch(SQLException e) {
-			this.logger.error(e.getStackTrace().toString());
+			this.logger.error(e.toString());
 			return null;
 		}
 	}

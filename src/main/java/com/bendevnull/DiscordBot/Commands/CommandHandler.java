@@ -102,20 +102,20 @@ public class CommandHandler {
 		t.start();
     }
     
-    public void runCommand(String s, final Message m, final String[] args) {
-        final Command c = this.getCommand(s);
-        if (c == null) {
-            this.logger.error(String.format("Command %s not found.", s));
-            return;
-        } else {
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    c.run(m, args);
-                }
-            });
-            t.start();
-        }
-    }
+    // public void runCommand(final String s, final Message m, final String[] args) {
+    //     final Command c = this.getCommand(s);
+    //     if (c == null) {
+    //         this.logger.error(String.format("Command %s not found.", s));
+    //         return;
+    //     } else {
+    //         Thread t = new Thread(new Runnable() {
+    //             public void run() {
+    //                 c.run(m, args);
+    //             }
+    //         });
+    //         t.start();
+    //     }
+    // }
 
     public static boolean hasPermissions(Member member, Permission[] permissions) {
         for (Permission p : permissions) {

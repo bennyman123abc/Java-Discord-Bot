@@ -28,13 +28,13 @@ public class HelpCommand extends Command {
 
         this.disable(); // TODO remove this when command is in a usable state
 
-        this.handler.addCommand(new Command("page", null, null, null) {
+        // this.handler.addCommand(new Command("page", null, null, null) {
         
-            @Override
-            public void run(Message message, String[] args) {
+        //     @Override
+        //     public void run(Message message, String[] args) {
                 
-            }
-        });
+        //     }
+        // });
     }
 
     @Override

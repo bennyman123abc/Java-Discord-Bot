@@ -13,11 +13,13 @@ public class IncorrectUsageResponse extends Command {
     private static Command cmd;
     private static Guild guild;
 
-    private static String cmdName;
+    // private static String cmdName;
+    private static Command iur;
 
     public IncorrectUsageResponse() {
         super("resp-iur", "", "", null);
-        cmdName = this.getName();
+        // cmdName = this.getName();
+        iur = this;
     }
 
     public void run(Message m, String[] args) {
@@ -28,6 +30,6 @@ public class IncorrectUsageResponse extends Command {
     public static void fire(Message m, Command c) {
         cmd = c;
         guild = m.getGuild();
-        Program.getCommandHandler().runCommand(cmdName, m, null);
+        Program.getCommandHandler().runCommand(iur, m, null);
     }
 }

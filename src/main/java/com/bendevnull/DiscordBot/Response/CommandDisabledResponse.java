@@ -8,7 +8,8 @@ import net.dv8tion.jda.core.entities.Message;
 
 public class CommandDisabledResponse extends Command {
 
-    private static String cmdName;
+    // private static String cmdName;
+    private static Command cmd;
     
     public CommandDisabledResponse() {
         super("resp-cdr", null, null, null);
@@ -19,6 +20,6 @@ public class CommandDisabledResponse extends Command {
     }
 
     public static void fire(Message m) {
-        Program.getCommandHandler().runCommand(cmdName, m, null);
+        Program.getCommandHandler().runCommand(cmd, m, null);
     }
 }

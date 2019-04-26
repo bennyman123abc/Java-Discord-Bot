@@ -27,7 +27,7 @@ public class GuildDAO {
 		this.handler.createTable(this.tableName, new String[]{
 			"id text NOT NULL",
 			"prefix text NOT NULL",
-			"word text NOT NULL"
+			"word text"
 		});
 	}
 	
